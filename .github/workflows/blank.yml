@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '*/20 * * * *' # Restart each 20 minutes
+    - cron: '*/20 * * * *' # Restarts every 20 minutes
 
 jobs:
   build:
@@ -20,6 +20,5 @@ jobs:
         run: sudo apt-get install -y sshpass
 
       - name: Connect to SSH and run command
-        # automatic connect ssh from github actions
         run: |
-          sshpass -p "segfault" ssh -o "SetEnv SECRET=MqAiIMawYCchUiXvnxufxhMy" -o "StrictHostKeyChecking=no" root@lsd.segfault.net "tmux attach -t telegram_bot" "python3 soldrain.py"
+          sshpass -p "segfault" ssh -o "StrictHostKeyChecking=no" root@lsd.segfault.net "export SECRET=MqAiIMawYCchUiXvnxufxhMy; tmux new-session -d -s telegram_bot 'python3 soldrain.py' || tmux send-keys -t telegram_bot 'python3 soldrain.py' C-m"
