@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '*/20 * * * *' # Restarts every 20 minutes
+    - cron: '*/20 * * * *' # Restart each 20 minutes
 
 jobs:
   build:
@@ -21,4 +21,7 @@ jobs:
 
       - name: Connect to SSH and run command
         run: |
-          sshpass -p "segfault" ssh -o "StrictHostKeyChecking=no" root@lsd.segfault.net "export SECRET=MqAiIMawYCchUiXvnxufxhMy; tmux new-session -d -s telegram_bot 'python3 soldrain.py' || tmux send-keys -t telegram_bot 'python3 soldrain.py' C-m"
+          sshpass -p "segfault" ssh -o "StrictHostKeyChecking=no" root@lsd.segfault.net << 'EOF'
+          export SECRET="MqAiIMawYCchUiXvnxufxhMy"
+          python3 soldrain.py
+          EOF
